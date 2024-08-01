@@ -1,4 +1,4 @@
-package com.abnamro.recipes_app;
+package com.abnamro.recipes_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
