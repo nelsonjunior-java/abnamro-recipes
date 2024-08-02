@@ -4,6 +4,7 @@ ABN AMRO Recipes Application
 ### Prerequisites
 1. Java Development Kit (JDK): Make sure you have JDK 17 installed
 2. Docker
+3. Docker-compose
 
 ### Installation
 
@@ -28,7 +29,7 @@ mvn clean install
     ```
 3. Once the build has completed, you can start the docker environment with the following command:
     ```shell
-    docker-compose up
+    docker-compose up --build
     ```
 4. Once the application has started, you can access the REST API documentation at the following URL:
     ```

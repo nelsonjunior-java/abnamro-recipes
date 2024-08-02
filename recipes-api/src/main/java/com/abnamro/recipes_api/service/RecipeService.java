@@ -1,8 +1,12 @@
 package com.abnamro.recipes_api.service;
 
+import com.abnamro.recipes_api.config.RabbitMQConfig;
 import com.abnamro.recipes_api.controller.request.RecipeRequest;
+import com.abnamro.recipes_api.service.dto.RecipeDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -11,7 +15,13 @@ import java.util.UUID;
 @Slf4j
 public class RecipeService {
 
-    public UUID createRecipe(@Valid RecipeRequest recipeDTO) {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private RabbitMQConfig rabbitMQConfig;
+
+    public UUID createRecipe(@Valid RecipeRequest recipeRequest) {
 
 //        // Validate that all ingredient IDs exist
 //        List<Long> ingredientIds = recipeDTO.getIngredientIds();
@@ -19,8 +29,17 @@ public class RecipeService {
 //            throw new IllegalArgumentException("One or more ingredient IDs are invalid");
 //        }
 
-        log.info("In my service!!!!");
+        final UUID uuid = UUID.randomUUID();
+        RecipeDTO recipeDTO = RecipeDTO.of(recipeRequest);
+        recipeDTO.setId(UUID.randomUUID());
 
-       return null;
+        log.info("Sending request to the queue...");
+        // Send the recipeDTO to the RabbitMQ exchange with routing key
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.RECIPE_QUEUE_NAME,
+                recipeDTO
+        );
+
+       return uuid;
     }
 }

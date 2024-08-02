@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ default port for communication
+      - "15672:15672" # RabbitMQ management plugin web UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: ./recipes-api
+    container_name: recipe_api
+    ports:
+      - "8080:8080" # Maps container's port 8080 to host's port 8080
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  consumer:
+    build:
+      context: ./recipes-consumer
+    container_name: recipe_consumer
+    ports:
+      - "8081:8080"  # Maps container's port 8080 to host's port 8081
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

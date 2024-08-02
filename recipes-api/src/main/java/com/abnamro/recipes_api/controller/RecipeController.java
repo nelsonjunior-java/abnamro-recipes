@@ -25,7 +25,7 @@ public class RecipeController {
 
         recipeService.createRecipe(recipe);
 
-        return null;
+        return ResponseEntity.ok("Recipe created and added to queue successfully");
     }
 
 }
