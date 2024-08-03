@@ -1,14 +1,16 @@
--- V1__Create_Recipes_Tables.sql
+-- V1__Create_Recipes_Initial_Tables.sql
 
 -- Create the ingredients table
 CREATE TABLE ingredients (
     id SERIAL PRIMARY KEY,
+    uuid UUID NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL
 );
 
 -- Create the recipes table
 CREATE TABLE recipes (
     id SERIAL PRIMARY KEY,
+    uuid UUID NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     is_vegetarian BOOLEAN NOT NULL,
     servings INTEGER NOT NULL,

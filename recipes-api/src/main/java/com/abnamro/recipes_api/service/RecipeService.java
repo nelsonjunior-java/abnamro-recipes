@@ -3,7 +3,7 @@ package com.abnamro.recipes_api.service;
 import com.abnamro.recipes_api.config.RabbitMQConfig;
 import com.abnamro.recipes_api.controller.request.RecipeRequest;
 import com.abnamro.recipes_api.infra.messaging.MessageSender;
-import com.abnamro.recipes_api.service.dto.RecipeMessageDTO;
+import com.abnamro.recipes_api.infra.messaging.dto.RecipeMessageDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

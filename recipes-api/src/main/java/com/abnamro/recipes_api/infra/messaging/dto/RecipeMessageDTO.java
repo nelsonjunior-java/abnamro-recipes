@@ -1,4 +1,4 @@
-package com.abnamro.recipes_api.service.dto;
+package com.abnamro.recipes_api.infra.messaging.dto;
 
 import com.abnamro.recipes_api.controller.request.RecipeRequest;
 import com.abnamro.recipes_api.infra.messaging.Message;
