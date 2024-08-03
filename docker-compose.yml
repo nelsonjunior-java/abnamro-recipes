@@ -26,6 +26,7 @@ services:
       SPRING_RABBITMQ_PASSWORD: admin
     depends_on:
       - rabbitmq
+      - postgres
     networks:
       - app-network
 
@@ -42,9 +43,28 @@ services:
       SPRING_RABBITMQ_PASSWORD: admin
     depends_on:
       - rabbitmq
+      - postgres
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    ports:
+      - "5432:5432" # Maps container's port 5432 to host's port 5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: abnamro
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Maps container's internal Postgres data directory to a named docker volume (postgres_data)
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

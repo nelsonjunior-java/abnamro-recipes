@@ -1,5 +1,6 @@
-package com.abnamro.recipes_consumer.service.dto;
+package com.abnamro.recipes_consumer.infra.messaging.dto;
 
+import com.abnamro.recipes_consumer.infra.messaging.Message;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class RecipeDTO implements Serializable {
+public class RecipeMessageDTO implements Message {
 
     private UUID id;
     private String name;

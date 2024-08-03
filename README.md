@@ -26,6 +26,9 @@ mvn clean install
 2. From the root directory of the project, run the following command to build and run the application:
     ```shell
     mvn clean package
+   
+    mvn flyway:migrate
+
     ```
 3. Once the build has completed, you can start the docker environment with the following command:
     ```shell
@@ -37,4 +40,16 @@ mvn clean install
     ```
 5. You can use the API documentation to try out the different endpoints and see how the application works.
 
+
+
+
+
+In a real production scenario the credential should not be exposed like it is now
+
+Create docker image with pgAdmin (Postgres UI):
+docker run --name pgadmin -p 80:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=admin -d dpage/pgadmin4
+
+
+To do:
+Add a config server
 

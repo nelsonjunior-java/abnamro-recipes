@@ -1,7 +1,8 @@
 package com.abnamro.recipes_consumer.config;
 
+import com.abnamro.recipes_consumer.infra.messaging.dto.IngredientMessageDTO;
+import com.abnamro.recipes_consumer.infra.messaging.dto.RecipeMessageDTO;
 import com.abnamro.recipes_consumer.service.RecipeConsumerService;
-import com.abnamro.recipes_consumer.service.dto.RecipeDTO;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
@@ -17,6 +18,7 @@ import java.util.Map;
 public class RabbitMQConfig {
 
     public static final String RECIPE_QUEUE_NAME = "recipes_queue";
+    public static final String INGREDIENT_QUEUE_NAME = "ingredients_queue";
 
     @Bean
     public Queue recipeQueue() {
@@ -51,9 +53,14 @@ public class RabbitMQConfig {
     public DefaultClassMapper classMapper() {
         DefaultClassMapper classMapper = new DefaultClassMapper();
         Map<String, Class<?>> idClassMapping = new HashMap<>();
-        // Map the class name used by the producer to the consumer's class
-        idClassMapping.put("com.abnamro.recipes_api.service.dto.RecipeDTO",
-                com.abnamro.recipes_consumer.service.dto.RecipeDTO.class);
+
+        // Map the class name used by the producer to the consumer's classes
+        idClassMapping.put("com.abnamro.recipes_api.service.dto.RecipeMessageDTO",
+                RecipeMessageDTO.class);
+
+        idClassMapping.put("com.abnamro.recipes_api.service.dto.IngredientMessageDTO",
+                IngredientMessageDTO.class);
+
         classMapper.setIdClassMapping(idClassMapping);
         // Ensure all relevant packages are trusted
         classMapper.setTrustedPackages("com.abnamro.recipes_api.service.dto",

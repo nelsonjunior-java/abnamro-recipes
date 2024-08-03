@@ -1,4 +1,11 @@
 spring:
+  application:
+    name: recipes-consumer
+  datasource:
+    url: jdbc:postgresql://postgres:5432/abnamro
+    username: admin
+    password: admin
+
   rabbitmq:
     host: localhost
     port: 5672
