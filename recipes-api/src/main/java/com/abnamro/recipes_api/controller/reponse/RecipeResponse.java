@@ -3,6 +3,8 @@ package com.abnamro.recipes_api.controller.reponse;
 import com.abnamro.recipes_api.model.Recipes;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import java.util.Set;
 
@@ -25,7 +27,12 @@ public class RecipeResponse {
         recipeResponse.setServings(recipes.getServings());
         recipeResponse.setInstructions(recipes.getInstructions());
 
-        //recipeResponse.setIngredients(rec);
+        final List<String> ingredients = recipes.getIngredients()
+                .stream()
+                .map(ingredient -> ingredient.getName())
+                .toList();
+
+        recipeResponse.setIngredients(new HashSet<>(ingredients));
 
         return recipeResponse;
     }

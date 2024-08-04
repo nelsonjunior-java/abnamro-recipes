@@ -40,7 +40,7 @@ public class RecipeController {
 
         recipeService.createRecipe(recipe);
 
-        return ResponseEntity.ok("Recipe created and added to queue successfully");
+        return ResponseEntity.ok("Recipe creation request successfully received!");
     }
 
     @GetMapping("/search")
