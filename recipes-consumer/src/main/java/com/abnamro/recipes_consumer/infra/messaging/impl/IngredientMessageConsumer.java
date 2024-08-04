@@ -24,9 +24,11 @@ public class IngredientMessageConsumer implements MessageConsumer<IngredientMess
     @RabbitListener(queues = RabbitMQConfig.INGREDIENT_QUEUE_NAME)
     public void consumeMessage(IngredientMessageDTO ingredientMessageDTO) {
 
+        // To do: Configurar  o acknoledgement manual
+
         log.info("New message consumed. method=consumeMessage, recipe={}", ingredientMessageDTO);
 
-        ingredientsService.save(ingredientMessageDTO);;
+        ingredientsService.save(ingredientMessageDTO);
     }
 
 }

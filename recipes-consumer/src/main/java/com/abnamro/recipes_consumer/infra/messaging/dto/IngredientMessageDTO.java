@@ -8,6 +8,7 @@ import java.util.UUID;
 @Data
 public class IngredientMessageDTO implements Message {
 
+    private Long id;
     private UUID uuid;
     private String name;
 }

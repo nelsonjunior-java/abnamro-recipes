@@ -3,7 +3,6 @@ package com.abnamro.recipes_consumer.infra.messaging.dto;
 import com.abnamro.recipes_consumer.infra.messaging.Message;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +13,6 @@ public class RecipeMessageDTO implements Message {
     private String name;
     private Integer servings;
     private String instructions;
-    private List<Long> ingredientIds;
+    private List<IngredientMessageDTO> ingredientIds;
     private Boolean vegetarian;
 }

@@ -51,5 +51,8 @@ docker run --name pgadmin -p 80:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e P
 
 
 To do:
-Add a config server
+- Add a config server
+- Validate UUID out of standard error (Uuid maior)
+- Send a list of Ingredent ids instead of the whole ingredients
+- Removes os auto wired
 

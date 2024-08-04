@@ -21,4 +21,5 @@ public class IngredientsService {
         log.info("Storing the ingredient in the database. method=save, ingredient={}", ingredientMessageDTO);
         ingredientRepository.save(ingredients);
     }
+
 }

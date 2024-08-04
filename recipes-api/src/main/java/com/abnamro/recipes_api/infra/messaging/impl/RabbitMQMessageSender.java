@@ -23,4 +23,5 @@ public class RabbitMQMessageSender implements MessageSender {
 
         rabbitTemplate.convertAndSend(queueName, message);
     }
+
 }

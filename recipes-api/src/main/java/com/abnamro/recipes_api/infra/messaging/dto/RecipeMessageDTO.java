@@ -13,15 +13,15 @@ public class RecipeMessageDTO implements Message {
     private String name;
     private Integer servings;
     private String instructions;
-    private List<Long> ingredientIds;
+    private List<IngredientMessageDTO> ingredientIds;
     private Boolean vegetarian;
 
-    public static RecipeMessageDTO of(RecipeRequest recipeRequest) {
+    public static RecipeMessageDTO of(RecipeRequest recipeRequest, List<IngredientMessageDTO> ingredientMessageDTOs) {
         RecipeMessageDTO recipeMessageDTO = new RecipeMessageDTO();
         recipeMessageDTO.setName(recipeRequest.getName());
         recipeMessageDTO.setServings(recipeRequest.getServings());
         recipeMessageDTO.setInstructions(recipeRequest.getInstructions());
-        recipeMessageDTO.setIngredientIds(recipeRequest.getIngredientIds());
+        recipeMessageDTO.setIngredientIds(ingredientMessageDTOs);
         recipeMessageDTO.setVegetarian(recipeRequest.getIsVegetarian());
 
         return recipeMessageDTO;
