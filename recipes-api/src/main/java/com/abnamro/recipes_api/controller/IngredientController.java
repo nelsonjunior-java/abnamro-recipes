@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -52,8 +53,7 @@ public class IngredientController {
         IngredientResponse response = new IngredientResponse();
         response.setUuid(uuid);
 
-        return ResponseEntity.ok(response);
-
+        return ResponseEntity.created(URI.create("/api/v1/ingredient/" + uuid)).body(response);
     }
 
     @Operation(description = "Retrieves an ingredient by its UUID")

@@ -7,9 +7,7 @@ import lombok.Data;
 @Data
 public class CreateIngredientRequest {
 
-//    @NotBlank(message = "{ingredient.notBlank}")
-//    @Size(max = ValidationConfig.MAX_LENGTH_NAME, message = "{ingredient.size}")
-//    @Pattern(regexp = ValidationConfig.PATTERN_NAME, message = "{ingredient.pattern}")
-//    @ApiModelProperty(notes = "The ingredient name", example = "Onion")
+    @NotBlank(message = "Ingredient name must not be blank.")
+    @Size(max = 255, message = "Ingredient name must not exceed 255 characters.")
     private String name;
 }

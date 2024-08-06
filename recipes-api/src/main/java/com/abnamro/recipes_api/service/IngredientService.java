@@ -31,9 +31,14 @@ public class IngredientService {
 
     public UUID save(CreateIngredientRequest createIngredientRequest) {
 
+        // Checks if an ingredient with the same name already exists in the database
+        if (ingredientRepository.existsByNameIgnoreCase(createIngredientRequest.getName().trim())) {
+            throw new IllegalArgumentException("Ingredient with this name already exists.");
+        }
+
         final UUID uuid = UUID.randomUUID();
         IngredientMessageDTO ingredientMessageDTO = IngredientMessageDTO.of(createIngredientRequest);
-        ingredientMessageDTO.setUuid(UUID.randomUUID());
+        ingredientMessageDTO.setUuid(uuid);
 
         messageSender.sendMessage(RabbitMQConfig.INGREDIENT_QUEUE_NAME, ingredientMessageDTO);
 

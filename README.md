@@ -41,7 +41,12 @@ mvn clean install
 5. You can use the API documentation to try out the different endpoints and see how the application works.
 
 
+### Integration Tests
+Run the following command:
+```shell
+mvn clean test -P integration-tests
 
+```
 
 
 In a real production scenario the credential should not be exposed like it is now
@@ -51,8 +56,11 @@ docker run --name pgadmin -p 80:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e P
 
 
 To do:
-- Add a config server
-- Validate UUID out of standard error (Uuid maior)
-- Send a list of Ingredent ids instead of the whole ingredients
+-- Add a config server
+- Send a list of Ingredient ids instead of the whole ingredients
 - Removes os auto wired
+- Add indexes to the database
+- Add a messages class
+- Add unique contraint to Ingredients name
+- Recipes controller not returning uuid
 
