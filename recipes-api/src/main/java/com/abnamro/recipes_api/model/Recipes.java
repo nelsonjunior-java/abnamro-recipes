@@ -38,7 +38,7 @@ public class Recipes {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String instructions;
 
-    @Column(columnDefinition = "tsvector")
+    @Column(name = "instructions_tsv", columnDefinition = "tsvector", insertable = false, updatable = false)
     private String instructions_tsv;
 
     @ManyToMany

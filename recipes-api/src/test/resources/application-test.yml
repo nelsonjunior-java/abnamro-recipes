@@ -4,6 +4,7 @@ spring:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     username: admin
     password: admin
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,5 +18,9 @@ spring:
 
   flyway:
     enabled: false
+
+
+
+
 
 

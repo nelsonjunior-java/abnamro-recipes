@@ -10,20 +10,25 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/recipe")
+@Validated
 @Slf4j
 public class RecipeController {
 
@@ -34,13 +39,18 @@ public class RecipeController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createRecipe(@Valid @RequestBody RecipeRequest recipe) {
+    public ResponseEntity<RecipeResponse> createRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
 
-        log.info("method=createRecipe, request={}", recipe);
+        log.info("method=createRecipe, request={}", recipeRequest);
 
-        recipeService.createRecipe(recipe);
+        final UUID recipeUuid = recipeService.createRecipe(recipeRequest);
 
-        return ResponseEntity.ok("Recipe creation request successfully received!");
+        // Create a response object with the UUID
+        final RecipeResponse response = new RecipeResponse();
+        response.setUuid(recipeUuid);
+        response.setName(recipeRequest.getName());
+
+        return ResponseEntity.created(URI.create("/api/v1/recipe/" + recipeUuid)).body(response);
     }
 
     @GetMapping("/search")
@@ -51,10 +61,10 @@ public class RecipeController {
     })
     public ResponseEntity<List<RecipeResponse>> searchRecipes(
             @RequestParam(required = false) Boolean isVegetarian,
-            @RequestParam(required = false) Integer servings,
-            @RequestParam(required = false) String includeIngredient,
-            @RequestParam(required = false) String excludeIngredient,
-            @RequestParam(required = false) String instructionText) {
+            @RequestParam(required = false) @Min(1) Integer servings,
+            @RequestParam(required = false) @Size(max = 255) String includeIngredient,
+            @RequestParam(required = false) @Size(max = 255) String excludeIngredient,
+            @RequestParam(required = false) @Size(max = 1000) String instructionText) {  // You can adjust the max size as needed
 
         log.info("method=searchRecipes, isVegetarian={}, servings={}, includeIngredient={}, excludeIngredient={}, instructionText={}",
                 isVegetarian, servings, includeIngredient, excludeIngredient, instructionText);
@@ -71,5 +81,6 @@ public class RecipeController {
 
         return ResponseEntity.ok(recipesResponseList);
     }
+
 
 }

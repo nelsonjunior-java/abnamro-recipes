@@ -1,6 +1,7 @@
 package com.abnamro.recipes_api.controller.reponse;
 
 import com.abnamro.recipes_api.model.Recipes;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import java.util.Set;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RecipeResponse {
 
     private UUID uuid;

@@ -1,6 +1,7 @@
-package com.abnamro.recipes_api.infra.repository.impl;
+package com.abnamro.recipes_api.unit.infra.repository.impl;
 
 import com.abnamro.recipes_api.controller.request.RecipeSearchRequest;
+import com.abnamro.recipes_api.infra.repository.impl.RecipeRepositoryCustomImpl;
 import com.abnamro.recipes_api.model.Recipes;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;

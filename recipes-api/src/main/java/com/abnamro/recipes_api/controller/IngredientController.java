@@ -47,13 +47,13 @@ public class IngredientController {
 
         log.info("method=createIngredient, request={}", createIngredientRequest);
 
-        UUID uuid = ingredientService.save(createIngredientRequest);
+        final UUID ingredientUuid = ingredientService.save(createIngredientRequest);
 
         // Create a response object with the UUID
-        IngredientResponse response = new IngredientResponse();
-        response.setUuid(uuid);
+        final IngredientResponse response = new IngredientResponse();
+        response.setUuid(ingredientUuid);
 
-        return ResponseEntity.created(URI.create("/api/v1/ingredient/" + uuid)).body(response);
+        return ResponseEntity.created(URI.create("/api/v1/ingredient/" + ingredientUuid)).body(response);
     }
 
     @Operation(description = "Retrieves an ingredient by its UUID")

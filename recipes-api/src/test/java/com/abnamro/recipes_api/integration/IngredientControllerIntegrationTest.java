@@ -12,7 +12,9 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Duration;
@@ -32,9 +34,14 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.hasSize;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.RabbitMQContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
 
 @Slf4j
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class IngredientControllerIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
@@ -52,6 +59,17 @@ public class IngredientControllerIntegrationTest extends BaseIntegrationTest {
 
     private static final String BASE_URL = "/api/v1/ingredient";
     private static final String INGREDIENTS_QUEUE = "ingredients_queue";
+
+    @Container
+    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:16")
+            .withDatabaseName("abnamro")
+            .withUsername("admin")
+            .withPassword("admin");
+
+    @Container
+    private static final RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3-management");
+
+
 
     @Test
     public void testCreateIngredient_Success() throws Exception {
@@ -79,10 +97,6 @@ public class IngredientControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void testCreateIngredient_ShouldProduceMessageInTheQueue() throws Exception {
-
-        while (rabbitTemplate.receiveAndConvert(INGREDIENTS_QUEUE) != null) {
-            // Keep clearing the queue
-        }
 
         // Creates request
         CreateIngredientRequest request = new CreateIngredientRequest();

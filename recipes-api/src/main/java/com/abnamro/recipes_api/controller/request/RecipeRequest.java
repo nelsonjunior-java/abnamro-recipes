@@ -4,6 +4,7 @@ import com.abnamro.recipes_api.controller.validator.ValidUUIDList;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 public class RecipeRequest {
 
     @NotBlank(message = "Name cannot be blank")
+    @Size(max = 255, message = "Name cannot be longer than 255 characters")
     private String name;
 
     @NotNull(message = "Servings cannot be null")
@@ -29,6 +31,7 @@ public class RecipeRequest {
     private List<String> ingredientIds;
 
     @NotBlank(message = "Instructions cannot be blank")
+    @Size(max = 1000, message = "Instructions cannot be longer than 1000 characters")  // Adjust the max size as needed
     private String instructions;
 
 }

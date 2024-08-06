@@ -45,18 +45,18 @@ public class RecipeService {
     public UUID createRecipe(@Valid RecipeRequest recipeRequest) {
 
         // Validate if Ingredients exist
-        List<Ingredients> ingredients = recipeRequest.getIngredientIds().stream()
+        final List<Ingredients> ingredients = recipeRequest.getIngredientIds().stream()
                 .map(this::validateAndFetchIngredient)
-                .collect(Collectors.toList());
+                .toList();
 
         // Convert Ingredients to IngredientMessageDTOs
-        List<IngredientMessageDTO> ingredientMessageDTOs = ingredients.stream()
+        final List<IngredientMessageDTO> ingredientMessageDTOs = ingredients.stream()
                 .map(IngredientMessageDTO::of)
                 .collect(Collectors.toList());
 
         final UUID uuid = UUID.randomUUID();
         RecipeMessageDTO recipeMessageDTO = RecipeMessageDTO.of(recipeRequest, ingredientMessageDTOs);
-        recipeMessageDTO.setId(UUID.randomUUID());
+        recipeMessageDTO.setId(uuid);
 
         messageSender.sendMessage(RabbitMQConfig.RECIPE_QUEUE_NAME, recipeMessageDTO);
 
