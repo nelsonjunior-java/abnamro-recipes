@@ -1,32 +1,37 @@
-package com.abnamro.recipes_api.integration.validations;
+package com.abnamro.recipes_api.integration.validation;
 
 import com.abnamro.recipes_api.controller.request.RecipeRequest;
 import com.abnamro.recipes_api.infra.repository.IngredientRepository;
 import com.abnamro.recipes_api.integration.BaseIntegrationTest;
 import com.abnamro.recipes_api.model.Ingredients;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slf4j
+@Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class RecipeRequestValidationIntegrationTest extends BaseIntegrationTest {
+public class RecipeControllerValidationIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,10 +40,19 @@ public class RecipeRequestValidationIntegrationTest extends BaseIntegrationTest 
     private ObjectMapper objectMapper;
 
     @Autowired
-    private IngredientRepository ingredientRepository;
+    private EntityManager entityManager;
+    @Autowired
+    IngredientRepository ingredientRepository;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private List<String> ingredientIds;
 
+    @Container
+    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:16")
+            .withDatabaseName("abnamro")
+            .withUsername("admin")
+            .withPassword("admin");
 
     @BeforeEach
     public void setUp() {
@@ -70,7 +84,7 @@ public class RecipeRequestValidationIntegrationTest extends BaseIntegrationTest 
 
         // Validate the error message is related to the specific field
         String content = result.getResponse().getContentAsString();
-        assertTrue(content.contains(testData.getExpectedError()), "Expected error message not found for field: " + testData.getFieldName());
+        assertTrue("Expected error message not found for field: " + testData.getFieldName(), content.contains(testData.getExpectedError()));
     }
 
     private RecipeRequest createRecipeRequest(RecipeRequestTestData testData) {

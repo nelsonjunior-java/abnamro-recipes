@@ -150,6 +150,7 @@
                             <includes>
                                 <!-- Include all tests in the integration package that end with 'IntegrationTest' -->
                                 <include>**/com/abnamro/recipes_api/integration/*IntegrationTest.java</include>
+                                <include>**/com/abnamro/recipes_api/integration/validation/*IntegrationTest.java</include>
                             </includes>
                         </configuration>
                     </plugin>
