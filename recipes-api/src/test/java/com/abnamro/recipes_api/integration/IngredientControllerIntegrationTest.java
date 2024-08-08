@@ -10,6 +10,7 @@ import com.jayway.jsonpath.JsonPath;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,6 +71,11 @@ public class IngredientControllerIntegrationTest extends BaseIntegrationTest {
     private static final RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3-management");
 
 
+    @BeforeEach
+    void setUp() {
+        // Clean up the database before each test
+        ingredientRepository.deleteAll();
+    }
 
     @Test
     public void testCreateIngredient_Success() throws Exception {

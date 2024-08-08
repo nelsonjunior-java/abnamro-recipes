@@ -66,7 +66,7 @@ public class RecipeController {
             @RequestParam(required = false) @Min(1) Integer servings,
             @RequestParam(required = false) @Size(max = 255) String includeIngredient,
             @RequestParam(required = false) @Size(max = 255) String excludeIngredient,
-            @RequestParam(required = false) @Size(max = 1000) String instructionText) {  // You can adjust the max size as needed
+            @RequestParam(required = false) @Size(max = 1000) String instructionText) {
 
         log.info("method=searchRecipes, isVegetarian={}, servings={}, includeIngredient={}, excludeIngredient={}, instructionText={}",
                 isVegetarian, servings, includeIngredient, excludeIngredient, instructionText);

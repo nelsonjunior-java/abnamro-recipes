@@ -87,6 +87,7 @@ public class RecipeControllerIntegrationTest extends BaseIntegrationTest {
 
     @BeforeEach
     public void setUp() {
+        ingredientRepository.deleteAll();
         saveIngredientsToDatabase();
     }
 
