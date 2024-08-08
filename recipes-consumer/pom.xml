@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<test.container.version>1.20.0</test.container.version>
+		<maven.surefire.version>3.3.0</maven.surefire.version>
 	</properties>
 	<dependencies>
 
@@ -61,7 +63,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -79,6 +80,28 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Testcontainers -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${test.container.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${test.container.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>rabbitmq</artifactId>
+			<version>${test.container.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -89,5 +112,26 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>integration-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${maven.surefire.version}</version>
+						<configuration>
+							<includes>
+								<!-- Include all tests in the integration package that end with 'IntegrationTest' -->
+								<include>**/com/abnamro/recipes_consumer/integration/*IntegrationTest.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

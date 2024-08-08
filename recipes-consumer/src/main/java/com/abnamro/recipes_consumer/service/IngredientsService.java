@@ -3,12 +3,14 @@ package com.abnamro.recipes_consumer.service;
 import com.abnamro.recipes_consumer.infra.messaging.dto.IngredientMessageDTO;
 import com.abnamro.recipes_consumer.infra.repository.IngredientRepository;
 import com.abnamro.recipes_consumer.model.Ingredients;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@Transactional
 public class IngredientsService {
 
     @Autowired

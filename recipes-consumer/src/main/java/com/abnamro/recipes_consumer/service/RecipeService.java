@@ -6,13 +6,13 @@ import com.abnamro.recipes_consumer.infra.repository.IngredientRepository;
 import com.abnamro.recipes_consumer.infra.repository.RecipeRepository;
 import com.abnamro.recipes_consumer.model.Ingredients;
 import com.abnamro.recipes_consumer.model.Recipes;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,13 +24,15 @@ public class RecipeService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
+    @Transactional
     public void save(RecipeMessageDTO recipeMessageDTO){
 
         // Extract UUIDs from the incoming RecipeMessageDTO
-        List<UUID> ingredientUuids = recipeMessageDTO.getIngredientIds().stream()
+        final List<UUID> ingredientUuids = recipeMessageDTO.getIngredientIds().stream()
                 .map(IngredientMessageDTO::getUuid)
                 .toList();
 
+        // Find all ingredients by UUID
         final List<Ingredients> ingredientsList = findByUuids(ingredientUuids);
 
         final Recipes recipes = Recipes.of(recipeMessageDTO, ingredientsList);
