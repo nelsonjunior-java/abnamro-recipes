@@ -5,6 +5,12 @@ The objective of the recipe management application is to provide a standalone Ja
 
 ![architecture](./recipes-application-architecure.png)
 
+For operations like creating a new `recipe` and creating a new `ingredient` the recipes-api will send this requests to their respective queues, returning an UUID to the user.
+Then the `recipes-consumer` will consume this request messages and store them in the database accordingly.
+
+For other operations like retrieving, or deleting an ingredient or a recipe the `recipes-api` will communicate directly with the database and perform this operations.
+
+
 ### Architectural Strategy
 To meet these requirements, the application architecture was designed with a microservices approach, consisting of two main services:
 1. **recipes-api**: Handles all CRUD operations for recipes and ingredients, and communicates with the database and message queue.
