@@ -11,6 +11,8 @@ import com.abnamro.recipes_api.infra.repository.IngredientRepository;
 import com.abnamro.recipes_api.infra.repository.RecipeRepository;
 import com.abnamro.recipes_api.model.Recipes;
 import com.abnamro.recipes_api.service.exception.IngredientNotFoundException;
+import com.abnamro.recipes_api.service.exception.RecipeNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -78,5 +80,15 @@ public class RecipeService {
 
         return recipeRepository.findRecipesBySearchCriteria(searchRequest);
 
+    }
+
+    @Transactional
+    public void deleteRecipe(UUID uuid) {
+
+        final Recipes recipe = recipeRepository.findByUuid(uuid)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found for UUID: " + uuid));
+
+        recipeRepository.delete(recipe);
+        log.info("Deleted recipe with uuid={}", uuid);
     }
 }

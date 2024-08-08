@@ -37,6 +37,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.shaded.org.awaitility.Awaitility;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -499,6 +500,68 @@ public class RecipeControllerIntegrationTest extends BaseIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(1)) // Expect 1 matching recipe
                 .andExpect(jsonPath("$[0].name").value("Tomato Basil Pasta")); // Validate the correct recipe is returned
     }
+
+    @Test
+    public void testDeleteRecipe_Success() throws Exception {
+        // Insert ingredients into the database
+        final Ingredients pasta = TestUtils.createIngredient("Pasta");
+        final Ingredients tomato = TestUtils.createIngredient("Tomato");
+        final Ingredients garlic = TestUtils.createIngredient("Garlic");
+        final Ingredients basil = TestUtils.createIngredient("Basil");
+
+        ingredientRepository.saveAll(List.of(pasta, tomato, garlic, basil));
+        // Arrange: Save a recipe to the database
+        final Recipes recipe = TestUtils.createRecipeWithIngredients("Basil Pasta", true, 2, "Boil pasta, add basil.", Set.of(pasta, basil));
+        recipeRepository.save(recipe);
+
+        // Act & Assert: Perform the delete operation and validate the response
+        mockMvc.perform(delete("/api/v1/recipe/" + recipe.getUuid())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        // Verify: Ensure the recipe has been deleted from the database
+        assertFalse(recipeRepository.findByUuid(recipe.getUuid()).isPresent());
+    }
+
+    @Test
+    public void testDeleteRecipe_NotFound() throws Exception {
+        // Insert ingredients into the database
+        final Ingredients pasta = TestUtils.createIngredient("Pasta");
+        final Ingredients tomato = TestUtils.createIngredient("Tomato");
+        final Ingredients garlic = TestUtils.createIngredient("Garlic");
+        final Ingredients basil = TestUtils.createIngredient("Basil");
+
+        ingredientRepository.saveAll(List.of(pasta, tomato, garlic, basil));
+
+        // Save a recipe to the database
+        final Recipes recipe = TestUtils.createRecipeWithIngredients("Tomato Basil Pasta", true, 4, "Cook pasta with tomato and basil.", Set.of(pasta, tomato, basil));
+        recipeRepository.save(recipe);
+
+        // Try to delete a non-existent recipe and expect a 404 response
+        final UUID nonExistentUuid = UUID.randomUUID(); // Use a UUID that is different from the saved recipe's UUID
+        mockMvc.perform(delete("/api/v1/recipe/" + nonExistentUuid)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        // Verify: Ensure the original recipe is still present in the database
+        assertTrue(recipeRepository.findByUuid(recipe.getUuid()).isPresent());
+    }
+
+    @Test
+    public void testDeleteRecipe_NonExistentUuid_ShouldReturnNotFound() throws Exception {
+        // Attempt to delete a recipe with a UUID that does not exist
+        final UUID nonExistentUuid = UUID.randomUUID(); // Generates a random valid UUID that is unlikely to exist in your database
+
+        MvcResult result = mockMvc.perform(delete("/api/v1/recipe/" + nonExistentUuid)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Recipe Not Found"))
+                .andReturn();
+    }
+
+
+
+
 
     private void saveIngredientsToDatabase() {
         final Ingredients ingredient1 = createIngredient(TOMATO);

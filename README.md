@@ -63,4 +63,6 @@ To do:
 - Add a messages class
 - Add unique contraint to Ingredients name
 - Recipes controller not returning uuid
+- Add documentation to classes
+- Fix delete ingredient endpoint
 

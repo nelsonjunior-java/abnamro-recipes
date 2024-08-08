@@ -15,7 +15,9 @@ import jakarta.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +82,21 @@ public class RecipeController {
         final List<RecipeResponse> recipesResponseList = recipes.stream().map(RecipeResponse::of).toList();
 
         return ResponseEntity.ok(recipesResponseList);
+    }
+
+    @DeleteMapping("/{uuid}")
+    @Operation(summary = "Delete a recipe by UUID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully deleted the recipe"),
+            @ApiResponse(responseCode = "404", description = "Recipe not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<Void> deleteRecipe(@PathVariable UUID uuid) {
+
+        log.info("method=deleteRecipe, uuid={}", uuid);
+
+        recipeService.deleteRecipe(uuid);
+        return ResponseEntity.noContent().build();
     }
 
 
