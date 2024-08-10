@@ -15,7 +15,25 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidUUIDList {
+
+    /**
+     * The default error message that is shown when the validation fails.
+     *
+     * @return the error message
+     */
     String message() default "Invalid UUID format in list";
+
+    /**
+     * Allows the specification of validation groups, to which this constraint belongs.
+     *
+     * @return the groups the constraint belongs to
+     */
     Class<?>[] groups() default {};
+
+    /**
+     * Can be used by clients of the Jakarta Bean Validation API to assign custom payload objects to a constraint.
+     *
+     * @return the payload associated with the constraint
+     */
     Class<? extends Payload>[] payload() default {};
 }

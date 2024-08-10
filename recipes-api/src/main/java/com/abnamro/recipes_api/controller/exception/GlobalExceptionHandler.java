@@ -20,6 +20,17 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Global exception handler for the application.
+ * <p>
+ * This class handles various exceptions that occur during the execution of the application,
+ * providing custom responses and logging where necessary.
+ * </p>
+ * <p>
+ * The class uses Spring's {@link ControllerAdvice} to centralize exception handling across all
+ * {@link org.springframework.web.bind.annotation.RestController} components.
+ * </p>
+ */
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {

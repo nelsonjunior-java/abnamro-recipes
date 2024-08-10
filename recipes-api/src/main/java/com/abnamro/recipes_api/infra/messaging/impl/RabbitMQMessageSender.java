@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 
+/**
+ * Implementation of the {@link MessageSender} interface using RabbitMQ.
+ * <p>
+ * This service is responsible for sending messages to a specified RabbitMQ queue.
+ * </p>
+ */
 @Service
 @Slf4j
 public class RabbitMQMessageSender implements MessageSender {
@@ -16,6 +22,12 @@ public class RabbitMQMessageSender implements MessageSender {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    /**
+     * Sends a message to the specified RabbitMQ queue.
+     *
+     * @param queueName the name of the RabbitMQ queue to which the message should be sent
+     * @param message   the message to be sent; it must be serializable
+     */
     @Override
     public void sendMessage(String queueName, Message message) {
 

@@ -37,9 +37,35 @@ Run the following command within each service directory for running all the Inte
 mvn clean test -P integration-tests
  ```
 
+## Database
+#### To access the PgAdmin (PostgreSQL UI) after the application started, do the following steps:
+1. Run this command:
+```shell
+docker run --name pgadmin \
+  -p 80:80 \
+  -e PGADMIN_DEFAULT_EMAIL=admin@admin.com \
+  -e PGADMIN_DEFAULT_PASSWORD=admin \
+  -v pg_admin_volume:/var/lib/pgadmin \
+  -d dpage/pgadmin4
+```
+2. Then access it direclty clicking at the following link:
+[http://localhost/browser](http://localhost/browser/)
 
 
+3. Then you can configure your connection like in the example bellow:
+
+![Logo](./doc/pgadmin_config.png)
+
+## RabbitMQ
+
+1. You can access it directly through the following link:
+
+    [http://localhost/browser](http://localhost:15672/#/queues)
 
 
+2. Then you can use the following credentials:
 
+   Username: `admin`
+
+   Password: `admin`
 
